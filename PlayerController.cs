@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Vector2 inputVector;
 
-    // Update is called once per frame
+    [SerializeField]
+    float speed = 5;
+
     void Update()
     {
-        
+        transform.Translate(inputVector * speed * Time.deltaTime);
     }
+
+    void OnMove(InputValue value)
+    {
+        inputVector = value.Get<Vector>();
+    }
+
 }
+
+
