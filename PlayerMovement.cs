@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
     public Transform feetPosition;
     public float groundCheckCircle;
 
+    int extraJump;
+    int extraJumpValue = 2;
+
     void Update()
     {
         input = Input.GetAxisRaw("Horizontal");  
@@ -29,13 +32,20 @@ public class PlayerMovement : MonoBehaviour
             spriteRenderer.flipX = false;
         }
 
-        //ja eller nej. Är karaktären på marken eller inte.
+        //ja eller nej. Är karaktären på marken eller inte. 
         isGrounded = Physics2D.OverlapCircle(feetPosition.position, groundCheckCircle, groundLayer);
-
+        //om man hoppar så subtractar den 1 och så har man 1 kvar att hoppa med
+        if(isGrounded == true){
+            extraJump = extraJumpValue;
+        }
         if (isGrounded == true && Input.GetButton("Jump"))
         {
-            playerRb.velocity = Vector2.up * jumpForce;
+           jumpUpdate();
         }
+        else if(extraJump > 0 && Input.GetKeyDown(KeyCode.Space)){
+            jumpUpdate();
+        } 
+
     }
 
 
@@ -43,5 +53,10 @@ public class PlayerMovement : MonoBehaviour
         
     {
         playerRb.velocity = new Vector2 (input * speed, playerRb.velocity.y); 
+    }
+
+    void jumpUpdate(){
+        playerRb.velocity = Vector2.up * jumpForce;
+        extraJump--;
     }
 }
